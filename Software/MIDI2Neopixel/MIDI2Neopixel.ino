@@ -9,7 +9,7 @@
 #define LED_PIN     5
 #define NUM_LEDS    144
 #define LED_TYPE    WS2812B
-#define COLOR_ORDER GRB
+#define COLOR_ORDER RGB
 #define AMPERAGE    1500     // Power supply amperage in mA
 
 #define NOTE_OFFSET   29     // Offset of first note from left (depends on Piano)
@@ -93,10 +93,14 @@ void noteOn(byte channel, byte pitch, byte velocity) {
       break;
     }
 
-    if (DEBUG == true){     Serial.println("Note ON   - Channel:" + String(channel) + " Pitch:" + String(pitch) + " Note:" + pitch_name(pitch) + String(pitch_octave(pitch)) + " Velocity:" + String(velocity)); }
+    #ifdef DEBUG
+    Serial.println("Note ON   - Channel:" + String(channel) + " Pitch:" + String(pitch) + " Note:" + pitch_name(pitch) + String(pitch_octave(pitch)) + " Velocity:" + String(velocity));
+    #endif
   }else{   
     SetNote(pitch,0x000000); // black
-    if (DEBUG == true){     Serial.println("Note OFF2 - Channel:" + String(channel) + " Pitch:" + String(pitch) + " Note:" + pitch_name(pitch) + String(pitch_octave(pitch)) + " Velocity:" + String(velocity)); }
+    #ifdef DEBUG
+    Serial.println("Note OFF2 - Channel:" + String(channel) + " Pitch:" + String(pitch) + " Note:" + pitch_name(pitch) + String(pitch_octave(pitch)) + " Velocity:" + String(velocity));
+    #endif
   }
   FastLED.show();
 }
@@ -173,7 +177,9 @@ void loop() {
         if (ledProgram>6){
           ledProgram = 1;
         }
-        if (DEBUG == true){     Serial.println("Button 1 pressed! Program is " + String(ledProgram)); }
+        #ifdef DEBUG
+        Serial.println("Button 1 pressed! Program is " + String(ledProgram));
+        #endif
         // Set LED indication for program
         fill_solid( leds, NUM_LEDS, CRGB(0,0,0));
         SetNote(NOTE_OFFSET+ledProgram-1,0xFF0000);
